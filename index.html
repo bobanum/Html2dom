@@ -1,15 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<script type="module">
-		import H from "./src/Html2dom.js";
+		import App from "./src/App.js";
+		App.load().then(() => {
+			console.log(1);
+		});
 	</script>
 	<title>Document</title>
 </head>
-<body>
 
-</body>
-</html>
+<body>
+	<div class="interface">
+		<header>
+			<h1>Html2dom</h1>
+		</header>
+		<footer>Rienavoir</footer>
+		<div class="body">
+			<form action="#" id="html2dom">
+				<div><textarea name="htmlIn" id="in" cols="65" rows="10">&lt;table id="stats" border="1" class="c1 c2" style="--variable: 123;border-width:1px solid black;border-color:red;"&gt;
+					&lt;tbody&gt;
+						&lt;tr class="selec teur"&gt;
+							&lt;th&gt;Sélecteur :&lt;/th&gt;
+							&lt;td&gt;&lt;/td&gt;
+						&lt;/tr&gt;
+						&lt;tr class="teur select"&gt;
+							&lt;th class="teur select"&gt;Signification :&lt;/th&gt;
+							&lt;td&gt;Une balise ayant la classe «bas»&lt;/td&gt;
+						&lt;/tr&gt;
+					&lt;/tbody&gt;
+				&lt;/table&gt;</textarea></div>
+				<div><input type="submit" value="Translate"></div>
+				<div><textarea name="domOut" id="out" cols="65" rows="10"></textarea></div>
+			</form>
+		</div>
+	</div>
+<table id="resultat" border="1">
+	<tbody>
+		<tr class="selecteur">
+			<th>Sélecteur :</th>
+			<td></td>
+		</tr>
+		<tr class="signification">
+			<th>Signification :</th>
+			<td>Une balise ayant la classe «bas»</td>
+		</tr>
+	</tbody>
+</table>
+</body></html>

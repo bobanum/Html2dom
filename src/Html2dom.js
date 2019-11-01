@@ -1,119 +1,126 @@
+/*jslint browser:true, esnext:true */
 export default class Html2dom {
-	static traduire(str) {
+	static init() {
+		this.varKeyword = "var";	//var, const or let
+		this.suffixOnes = false;
+		this.CRLF = "\r\n";
+	}
+	static translate(str) {
 		var dom = document.createElement("div");
 		dom.innerHTML = str;
-		this.variables = [];
-		var resultat = "";
+		this.variables = {};
+		var result = "";
 		var nodes = Array.from(dom.childNodes);
 		nodes.forEach(node => {
-			var nomVariable = this.nomVariable(node);
-			resultat += `var ${nomVariable} = document.createElement("${node.localName}");\r\n`;
-			resultat += this.attributs(nomVariable, node);
-			resultat += this.contenu(node.childNodes, nomVariable);
-			this.supprimerVariable(nomVariable);
+			var varName = this.varName(node);
+			result += `${this.varKeyword} ${varName} = document.createElement("${node.localName}");${this.CRLF}`;
+			result += this.translateAttributes(node, varName);
+			result += this.translateContent(node.childNodes, varName);
+			this.removeVariable(varName);
 		});
-		return resultat;
+		return result;
 	}
-	static attributs(nomVariable, node) {
-		var dummy = document.createElement("div");
-		var resultat = "";
-		var attributs = Array.from(node.attributes);
-		attributs.forEach(attribut => {
-			var name = attribut.localName;
-			var value = attribut.nodeValue.replace(/"/g, "&quot;");
-			console.log(value);
+	static translateAttributes(node, varName) {
+		var result = "";
+		var attributes = Array.from(node.attributes);
+		attributes.forEach(attribute => {
+			var name = attribute.localName;
+			var value = attribute.nodeValue.replace(/"/g, "&quot;");
 			if (name === "class") {
-				resultat += this.classes(nomVariable, value);
+				result += this.translateClasses(value, varName);
 			} else if (name === "style") {
-				resultat += this.styles(nomVariable, value);
+				result += this.translateStyles(value, varName);
 			} else {
-				resultat += `${nomVariable}.setAttribute("${name}", "${value}");\r\n`;
+				result += `${varName}.setAttribute("${name}", "${value}");${this.CRLF}`;
 			}
 		});
-		return resultat;
+		return result;
 	}
-	static classes(nomVariable, classes) {
-		var resultat = "";
+	static translateClasses(classes, varName) {
+		var result = "";
 		classes = classes.trim().split(/\s+/);
-		classes.forEach(classe => {
-			resultat += `${nomVariable}.classList.add("${classe}");\r\n`;
+		classes.forEach(className => {
+			result += `${varName}.classList.add("${className}");${this.CRLF}`;
 		});
-		return resultat;
+		return result;
 	}
-	static styles(nomVariable, styles) {
-		var resultat = "";
-		var styles = styles.trim().split(/(?: *; *)+/);
+	static translateStyles(styles, varName) {
+		var result = "";
+		styles = styles.trim().split(/(?: *; *)+/);
 		styles.forEach(style => {
 			if (!style.trim()) {
 				return;
 			}
-			var [nomProp, valProp] = style.split(/\s*:\s*/);
-			if (nomProp.substr(0,2) === "--") {
-				resultat += `${nomVariable}.style.setProperty("${nomProp}", "${valProp}");\r\n`;
+			var [propName, propVal] = style.split(/\s*:\s*/);
+			if (propName.substr(0,2) === "--") {
+				result += `${varName}.style.setProperty("${propName}", "${propVal}");${this.CRLF}`;
 			} else {
-				nomProp = nomProp.split("-")[0] + nomProp.split("-").slice(1).map(part => part[0].toUpperCase() + part.substr(1)).join("");
-				resultat += `${nomVariable}.style.${nomProp} = "${valProp}";\r\n`;
+				propName = propName.split("-")[0] + propName.split("-").slice(1).map(part => part[0].toUpperCase() + part.substr(1)).join("");
+				result += `${varName}.style.${propName} = "${propVal}";${this.CRLF}`;
 			}
 		});
-		return resultat;
+		return result;
 	}
-	static nomVariable(node) {
-		var nomVariable = node.localName;
-		if (nomVariable === "#text") {
+	static varName(node) {
+		var varName = node.localName;
+		if (varName === "#text") {
 			return false;
 		}
 		if (node.getAttribute("id")) {
-			nomVariable = node.getAttribute("id");
+			varName = node.getAttribute("id");
+			return varName;
 		}
-		if (this.variables.indexOf(nomVariable) >= 0) {
-			let no = 2;
-			while (this.variables.indexOf(nomVariable + no) >= 0) {
-				no += 1;
-			}
-			nomVariable += no;
+		if (node.getAttribute("class")) {
+			varName = node.getAttribute("class").trim().split(/\s+/).sort().join("_");
 		}
-		this.variables.push(nomVariable);
-		return nomVariable;
+		if (this.variables[varName] === undefined) {
+			this.variables[varName] = 0;
+		}
+		this.variables[varName] += 1;
+		if (this.variables[varName] === 1 && !this.suffixOnes) {
+			return varName;
+		}
+		return varName + this.variables[varName];
 	}
-	static supprimerVariable(nomVariable) {
-		var pos = this.variables.indexOf(nomVariable);
-		if (pos < 0) {
+	static removeVariable(varName) {
+		varName = varName.replace(/[0-9]+$/, "");
+		if (this.variables[varName] === undefined) {
 			return;
 		}
-		this.variables.splice(pos, 1);
+		this.variables[varName] -= 1;
 	}
-	static contenu(nodes, nomParent) {
-		var resultat = "";
-		var nodes = Array.from(nodes);
+	static translateContent(nodes, parentName) {
+		var result = "";
+		nodes = Array.from(nodes);
 		nodes = nodes.filter(node => node.nodeName !== "#text" || node.nodeValue.trim());
 		if (nodes.length === 1 && nodes[0].nodeName === "#text") {
-			if (nomParent) {
-				resultat += `${nomParent}.innerHTML = "${nodes[0].nodeValue}";\r\n`;
+			if (parentName) {
+				result += `${parentName}.innerHTML = "${nodes[0].nodeValue}";${this.CRLF}`;
 			} else {
-				resultat += `document.createTextNode("${nodes[0].nodeValue}");\r\n`;
+				result += `document.createTextNode("${nodes[0].nodeValue}");${this.CRLF}`;
 			}
-			return resultat;
+			return result;
 		}
 		nodes.forEach(node => {
-			var nomVariable = this.nomVariable(node);
-			if (nomVariable) {
-				if (nomParent) {
-					resultat += `var ${nomVariable} = ${nomParent}.appendChild(document.createElement("${node.localName}"));\r\n`;
+			var varName = this.varName(node);
+			if (varName) {
+				if (parentName) {
+					result += `${this.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement("${node.localName}"));${this.CRLF}`;
 				} else {
-					resultat += `var ${nomVariable} = document.createElement("${node.localName}");\r\n`;
+					result += `${this.varKeyword} ${varName} = document.createElement("${node.localName}");${this.CRLF}`;
 				}
-				resultat += this.attributs(nomVariable, node);
-				resultat += this.contenu(node.childNodes, nomVariable);
+				result += this.translateAttributes(node, varName);
+				result += this.translateContent(node.childNodes, varName);
 			} else {
-				if (nomParent) {
-					resultat += `${nomParent}.appendChild(document.createTextNode("${node.nodeValue}"));\r\n`;
+				if (parentName) {
+					result += `${parentName}.appendChild(document.createTextNode("${node.nodeValue}"));${this.CRLF}`;
 				} else {
-					resultat += `document.createTextNode("${node.nodeValue}");\r\n`;
+					result += `document.createTextNode("${node.nodeValue}");${this.CRLF}`;
 				}
 			}
-			this.supprimerVariable(nomVariable);
+			this.removeVariable(varName);
 		});
-		return resultat;
+		return result;
 	}
 }
-console.log(Html2dom.traduire('<table id="stats" border="&quot;1" class="c1 c2" style="--variable: 123;border-width:1px solid black;border-color:red;">   <tbody><tr class="selecteur"><th>Sélecteur :</th><td></td></tr><tr class="signification"><th>Signification :</th><td>Une balise ayant la classe «bas»</td></tr></tbody></table>'));
+Html2dom.init();
