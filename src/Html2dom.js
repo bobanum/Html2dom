@@ -62,9 +62,12 @@ export default class Html2dom {
 		return result;
 	}
 	static varName(node) {
-		var varName = node.localName;
-		if (varName === "#text") {
-			return false;
+		var varName = node.localName || node.nodeName;
+		if (!varName || varName === "#text") {
+			return "#text";
+		}
+		if (varName === "#comment") {
+			return "#comment";
 		}
 		if (node.getAttribute("id")) {
 			varName = node.getAttribute("id");
@@ -103,7 +106,20 @@ export default class Html2dom {
 		}
 		nodes.forEach(node => {
 			var varName = this.varName(node);
-			if (varName) {
+			if (varName === "#comment") {
+				if (parentName) {
+					result += `${parentName}.appendChild(document.createComment("${node.nodeValue}"));${this.CRLF}`;
+				} else {
+					result += `document.createComment("${node.nodeValue}");${this.CRLF}`;
+				}
+				console.log(varName);
+			} else if (varName === "#text") {
+				if (parentName) {
+					result += `${parentName}.appendChild(document.createTextNode("${node.nodeValue}"));${this.CRLF}`;
+				} else {
+					result += `document.createTextNode("${node.nodeValue}");${this.CRLF}`;
+				}
+			} else {
 				if (parentName) {
 					result += `${this.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement("${node.localName}"));${this.CRLF}`;
 				} else {
@@ -111,14 +127,8 @@ export default class Html2dom {
 				}
 				result += this.translateAttributes(node, varName);
 				result += this.translateContent(node.childNodes, varName);
-			} else {
-				if (parentName) {
-					result += `${parentName}.appendChild(document.createTextNode("${node.nodeValue}"));${this.CRLF}`;
-				} else {
-					result += `document.createTextNode("${node.nodeValue}");${this.CRLF}`;
-				}
+				this.removeVariable(varName);
 			}
-			this.removeVariable(varName);
 		});
 		return result;
 	}
