@@ -5,20 +5,21 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="icon" href="logo.svg">
 	<link rel="stylesheet" href="css/style.css">
 	<script type="module">
 		import App from "./src/App.js";
 		App.load();
 	</script>
-<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/ace.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/css/ace.min.css " rel="stylesheet">
-	<title>Html2dom</title>
+	<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/ace.min.js"></script>
+	<link href="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/css/ace.min.css " rel="stylesheet">
+	<title>HTML2DOM</title>
 </head>
 
 <body>
 	<div id="interface">
 		<header>
-			<h1><img src="logo_white.svg" alt="">Html2dom</h1>
+			<h1><img src="logo_white.svg" alt="">HTML2DOM</h1>
 		</header>
 		<div id="app">
 			<form action="#" id="html2dom">
@@ -38,16 +39,19 @@
 	</div>
 	<div id="exemple">
 		<table id="resultat" border="1">
+			<!-- Il n'y a pas de thead -->
 			<tbody>
 				<tr class="selecteur">
 					<th>Sélecteur :</th>
-					<td></td>
+					<td style="color:red;  background-blend-mode: darken;"></td>
 				</tr>
-				<tr class="signification">
+				<tr class="signification important">
 					<th>Signification &lt;:</th>
-					<td>Une balise ayant la classe «bas»</td>
+					<td>Une balise ayant la <b>classe</b> <q>bas</q></td>
 				</tr>
 			</tbody>
 		</table>
 	</div>
-</body></html>
+</body>
+
+</html>
