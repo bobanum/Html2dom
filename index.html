@@ -5,290 +5,49 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" href="css/style.css">
 	<script type="module">
 		import App from "./src/App.js";
-		App.load().then(() => {
-			console.log(1);
-		});
+		App.load();
 	</script>
+<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/ace.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/css/ace.min.css " rel="stylesheet">
 	<title>Html2dom</title>
 </head>
 
 <body>
-	<div class="interface">
+	<div id="interface">
 		<header>
-			<h1>Html2dom</h1>
+			<h1><img src="logo_white.svg" alt="">Html2dom</h1>
 		</header>
-		<footer>Rienavoir</footer>
-		<div class="body">
+		<div id="app">
 			<form action="#" id="html2dom">
-				<div><textarea name="htmlIn" id="in" cols="65" rows="10">&lt;div class="interface"&gt;
-					&lt;header&gt;
-						&lt;h1&gt;Documentation&lt;/h1&gt;
-						&lt;a href="api"&gt;API&lt;/a&gt;
-					&lt;/header&gt;
-					&lt;footer&gt;
-						&amp;copy; Martin Boudreau
-					&lt;/footer&gt;
-					&lt;div class="body"&gt;
-						&lt;div class="column"&gt;
-				
-						&lt;/div&gt;
-						&lt;div class="content"&gt;
-							&lt;ul&gt;
-								&lt;li&gt;
-									&lt;h2 id="les_fichiers"&gt;Les fichiers&lt;/h2&gt;
-									&lt;ul class="enum"&gt;
-										&lt;li&gt;&lt;a href="#choix_multiple"&gt;choix.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#complexe"&gt;complexe.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#corriger"&gt;corriger.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#courtes"&gt;courtes.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#crypt"&gt;crypt.php&lt;/a&gt; (???)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#doc"&gt;doc.html&lt;/a&gt; (Ce fichier)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#favicon"&gt;favicon.png&lt;/a&gt; (QR)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#index"&gt;index.html&lt;/a&gt; (La page pour tester la version)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#match"&gt;match.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#qr"&gt;qr.css&lt;/a&gt; (Feuille de style portant sur la mécanique avec une mise en page simple)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#qr"&gt;qr.js&lt;/a&gt; (Classe principale)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#qr"&gt;qr.less&lt;/a&gt; ()&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#question"&gt;question.js&lt;/a&gt; (Classe principale)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#quisuisje"&gt;quisuisje.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#randomseed"&gt;randomseed.js&lt;/a&gt; ()&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#style"&gt;style.css&lt;/a&gt; ()&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#style"&gt;style.less&lt;/a&gt; ()&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#temp"&gt;temp.html&lt;/a&gt; ()&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#trous"&gt;trous.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-										&lt;li&gt;&lt;a href="#vraifaux"&gt;vraifaux.js&lt;/a&gt; (Type de question)&lt;/li&gt;
-									&lt;/ul&gt;
-								&lt;/li&gt;
-								&lt;li&gt;
-									&lt;h2&gt;Point de départ&lt;/h2&gt;
-									&lt;div class="blockcode"&gt;
-										&lt;div&gt;&amp;lt;!DOCTYPE html&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;html lang="fr"&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;head&amp;gt;&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;meta charset="utf-8" /&amp;gt;&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;script src="https://bobanum.github.io/qr/App.js"&amp;gt;&amp;lt;/script&amp;gt;&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;!-- &amp;lt;script src="App.js"&amp;gt;&amp;lt;/script&amp;gt;--&amp;gt;&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;script&amp;gt;&lt;/div&gt;
-										&lt;div&gt;        &lt;del&gt;App.cfg({&lt;/del&gt;&lt;/div&gt;
-										&lt;div&gt;            &lt;del&gt;'cours': 'Titre du cours',&lt;/del&gt;&lt;/div&gt;
-										&lt;div&gt;            &lt;del&gt;'titre': 'Titre de l'épreuve,&lt;/del&gt;&lt;/div&gt;
-										&lt;div&gt;            &lt;del&gt;'version': 'Seed|Etiquette',&lt;/del&gt;&lt;/div&gt;
-										&lt;div&gt;        &lt;del&gt;});&lt;/del&gt;&lt;/div&gt;
-										&lt;div&gt;        App.setConfig({&lt;/div&gt;
-										&lt;div&gt;            'cours': 'Titre du cours',&lt;/div&gt;
-										&lt;div&gt;            'titre': 'Titre de l\'épreuve',&lt;/div&gt;
-										&lt;div&gt;            'version': 'Seed|Etiquette',&lt;/div&gt;
-										&lt;div&gt;        });&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;/script&amp;gt;&lt;/div&gt;
-										&lt;div&gt;    &amp;lt;title&amp;gt;Titre du cours - Titre de l'épreuve&amp;lt;/title&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;/head&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;body data-questions-alea="true"&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;/body&amp;gt;&lt;/div&gt;
-										&lt;div&gt;&amp;lt;/html&amp;gt;&lt;/div&gt;
-									&lt;/div&gt;
-								&lt;/li&gt;
-				&lt;!--
-								&lt;li&gt;
-									&lt;h2&gt;Les propriétés (Très brute)&lt;/h2&gt;
-									&lt;ul class="framedchildren"&gt;
-										&lt;li&gt;
-											&lt;h3&gt;actif&lt;/h3&gt;
-											&lt;p&gt;Indique si une question est utilisée dans le questionnaire. Équivalent (moins sûr) de la mettre en commentaire.&lt;/p&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;alea (courtes.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;aleaSelecteur (courtes.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;choisir* (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;inverse (choix.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;inverse (match.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;inverse (quisuisje.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeur (choix.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeur (courtes.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeur (match.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeur (quisuisje.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeur (trous.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;largeurEnonce (courtes.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;melanger (quisuisje.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;melanger* (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;numero [ none | decimal | (lower-|upper-)&lt;strong&gt;alpha&lt;/strong&gt; | (lower-|upper-)roman] (courtes.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;poids* (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;ratio5 (trous.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;selecteurChoisir (match.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;selecteurGarder (match.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;selecteurMelanger* (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;self.style (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;unite (trous.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-										&lt;li&gt;
-											&lt;h3&gt;valeur* (question.js)&lt;/h3&gt;
-											&lt;h4&gt;Utilisée par&lt;/h4&gt;
-											&lt;ul class="enum"&gt;
-												&lt;li&gt;Toutes les questions&lt;/li&gt;
-											&lt;/ul&gt;
-										&lt;/li&gt;
-									&lt;/ul&gt;
-								&lt;/li&gt;
-				--&gt;
-								&lt;li&gt;
-									&lt;h2&gt;Pour créer un nouveau type de question&lt;/h2&gt;
-									&lt;p&gt;À faire&lt;/p&gt;
-								&lt;/li&gt;
-							&lt;/ul&gt;
-						&lt;/div&gt;
-				
-					&lt;/div&gt;
-				&lt;/div&gt;</textarea></div>
-				<div><input type="submit" value="Translate"></div>
-				<div><textarea name="domOut" id="out" cols="65" rows="10"></textarea></div>
+				<fieldset id="html">
+					<legend>HTML</legend>
+					<div id="in"></div>
+				</fieldset>
+				<fieldset id="dom">
+					<legend>Javascript</legend>
+					<div id="out"></div>
+				</fieldset>
+				<fieldset id="options">
+					<legend>Options</legend>
+				</fieldset>
 			</form>
 		</div>
 	</div>
-<table id="resultat" border="1">
-	<tbody>
-		<tr class="selecteur">
-			<th>Sélecteur :</th>
-			<td></td>
-		</tr>
-		<tr class="signification">
-			<th>Signification :</th>
-			<td>Une balise ayant la classe «bas»</td>
-		</tr>
-	</tbody>
-</table>
+	<div id="exemple">
+		<table id="resultat" border="1">
+			<tbody>
+				<tr class="selecteur">
+					<th>Sélecteur :</th>
+					<td></td>
+				</tr>
+				<tr class="signification">
+					<th>Signification &lt;:</th>
+					<td>Une balise ayant la classe «bas»</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body></html>

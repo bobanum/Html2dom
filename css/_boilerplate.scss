@@ -1,0 +1,25 @@
+html {
+	font-family: var(--font-text);	
+	background-color: hsl(var(--h), var(--s), var(--l));
+}
+body {
+	min-height: 100vh;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: var(--font-title);
+}
+*, *::before, *::after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+img, svg {
+	display: block;
+}
+svg use {
+	fill: currentColor;
+}

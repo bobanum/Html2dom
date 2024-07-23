@@ -1,11 +1,15 @@
-/*jslint browser:true, esnext:true */
 export default class Html2dom {
-	static init() {
-		this.varKeyword = "var";	//var, const or let
-		this.suffixOnes = false;
-		this.CRLF = "\r\n";
-	}
+	static varKeyword = "var";	// How to declare variables. var, let, const
+	static suffixOnes = false;	// Whether to add a number to the end of variable names
+	static CRLF = "\r\n";	// How to represent a newline : "\n", "\r\n", "\r"
+	static semicolon = true;	// Whether to add a semicolon at the end of each line
+	static compoundAppendChild = true;	// Whether to use appendChild and createElement together
+	static compoundClassListAdd = true;	// Whether to use multiple classList.add or multiple arguments
+	static forceInnerHTML = false;	// Whether to use innerHTML instead of textContent
+	static forceSetAttribute = false;	// Whether to use setAttribute instead of direct assignment
+	static appendTextNode = false;	// Whether to use createTextNode and appendChild
 	static translate(str) {
+		str = str.trim().replace(/&/g, "&amp;");
 		var dom = document.createElement("div");
 		dom.innerHTML = str;
 		this.variables = {};
@@ -21,6 +25,9 @@ export default class Html2dom {
 		return result;
 	}
 	static translateAttributes(node, varName) {
+		if (!node.attributes) {
+			return "";
+		}
 		var result = "";
 		var attributes = Array.from(node.attributes);
 		attributes.forEach(attribute => {
@@ -98,7 +105,7 @@ export default class Html2dom {
 		nodes = nodes.filter(node => node.nodeName !== "#text" || node.nodeValue.trim());
 		if (nodes.length === 1 && nodes[0].nodeName === "#text") {
 			if (parentName) {
-				result += `${parentName}.innerHTML = "${nodes[0].nodeValue}";${this.CRLF}`;
+				result += `${parentName}.textContent = "${nodes[0].nodeValue}";${this.CRLF}`;
 			} else {
 				result += `document.createTextNode("${nodes[0].nodeValue}");${this.CRLF}`;
 			}
@@ -133,4 +140,3 @@ export default class Html2dom {
 		return result;
 	}
 }
-Html2dom.init();
