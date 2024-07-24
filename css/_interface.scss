@@ -26,6 +26,13 @@
             align-items: center;
             gap: 1rem;
             justify-content: center;
+            i {
+                display: inline-block;
+                font-size: 1.5em;
+                color: #ffa500;
+                transform: translate(-.1em, .1em);
+                line-height: 0;
+            }
         }
     }
 

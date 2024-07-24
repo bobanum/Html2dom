@@ -19,10 +19,10 @@
 <body>
 	<div id="interface">
 		<header>
-			<h1><img src="logo_white.svg" alt="">HTML2DOM</h1>
+			<h1><img src="logo_white.svg" alt=""><span>HTML<i>2</i>DOM</span></h1>
 		</header>
 		<div id="app">
-			<form action="#" id="html2dom">
+			<div action="#" id="html2dom">
 				<fieldset id="html">
 					<legend>HTML</legend>
 					<div id="in"></div>
@@ -33,14 +33,125 @@
 				</fieldset>
 				<fieldset id="options">
 					<legend>Options</legend>
+					<form>
+						<div>
+							<label for="varKeyword">Variable keyword</label>
+							<select name="varKeyword">
+								<option selected>const</option>
+								<option>let</option>
+								<option>var</option>
+							</select>
+							<div class="hint">
+								<div>How to declare variables.</div>
+							</div>
+						</div>
+						<div>
+							<label for="textContent">Text Content</label>
+							<select name="textContent">
+								<option selected>textContent</option>
+								<option>innerHTML</option>
+								<option>textNode</option>
+							</select>
+							<div class="hint">
+								<div>How to set text content to element.</div>
+							</div>
+						</div>
+						<div>
+							<label for="linefeed">Linefeed</label>
+							<select name="linefeed">
+								<option>CR</option>
+								<option selected>CRLF</option>
+								<option>LF</option>
+							</select>
+							<div class="hint">
+								<div>How to represent a newline : "\r\n", "\r", "\n"</div>
+							</div>
+						</div>
+						<div>
+							<label for="compoundAppendChild">Compound "appendChild"</label>
+							<div><input type="checkbox" name="compoundAppendChild" checked></div>
+							<div class="hint">
+								<div>Whether to use appendChild and createElement together</div>
+							</div>
+						</div>
+						<div>
+							<label for="compoundClassListAdd">Compound "classList.add"</label>
+							<div><input type="checkbox" name="compoundClassListAdd" checked></div>
+							<div class="hint">
+								<div>Whether to use multiple classList.add or multiple arguments</div>
+							</div>
+						</div>
+						<div>
+							<label for="semicolon">Semicolons</label>
+							<div><input type="checkbox" name="semicolon" checked></div>
+							<div class="hint">
+								<div>Whether to add a semicolon at the end of each line</div>
+							</div>
+						</div>
+						<div>
+							<label for="suffixOnes">Suffixe Ones</label>
+							<div><input type="checkbox" name="suffixOnes"></div>
+							<div class="hint">
+								<div>Whether to add a number to the end of variable names</div>
+							</div>
+						</div>
+						<div>
+							<label for="forceSetAttribute">Force setAttribute</label>
+							<div><input type="checkbox" name="forceSetAttribute"></div>
+							<div class="hint">
+								<div>Whether to use setAttribute instead of direct assignment</div>
+							</div>
+						</div>
+						<!-- // classAsAttribute: false, // !!Whether to use setAttribute("class", "className") or classList.add("className") -->
+						<div>
+							<label for="classAsAttribute">Class as attribute</label>
+							<div><input type="checkbox" name="classAsAttribute"></div>
+							<div class="hint">
+								<div>Whether to use setAttribute("class", "className") or classList.add("className")</div>
+							</div>
+						</div>
+						<!-- // styleAsAttribute: false, // !!Whether to use setAttribute("style", "prop: val;") or style.setProperty("prop", "val") -->
+						<div>
+							<label for="styleAsAttribute">Style as attribute</label>
+							<div><input type="checkbox" name="styleAsAttribute"></div>
+							<div class="hint">
+								<div>Whether to use setAttribute("style", "prop: val;") or style.setProperty("prop", "val")</div>
+							</div>
+						</div>
+						<div>
+							<label for="forceSetProperty">Force setProperty</label>
+							<div><input type="checkbox" name="forceSetProperty"></div>
+							<div class="hint">
+								<div>Whether to use style.setProperty instead of direct assignment</div>
+							</div>
+						</div>
+						<div>
+							<label for="declarationsOnTop">Declarations on top</label>
+							<div><input type="checkbox" name="declarationsOnTop" checked></div>
+							<div class="hint">
+								<div>Whether to declare all variables at the top of the code (for var only) </div>
+							</div>
+						</div>
+						<div>
+							<label for="quoteStyle">Quote style</label>
+							<select name="quoteStyle">
+								<option selected value="double">""</option>
+								<option value="single">''</option>
+								<option value="backticks">``</option>
+							</select>
+							<div class="hint">
+								<div>Whether to use single, double or backticks quotes</div>
+							</div>
+						</div>
+					</form>
 				</fieldset>
-			</form>
+			</div>
 		</div>
 	</div>
 	<div id="exemple">
 		<table id="resultat" border="1">
 			<!-- Il n'y a pas de thead -->
-			<tbody>
+			<tbody data-test="1" data-other-test="2" for="ffoorr">
 				<tr class="selecteur">
 					<th>Sélecteur :</th>
 					<td style="color:red;  background-blend-mode: darken;"></td>

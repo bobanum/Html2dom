@@ -1,15 +1,20 @@
 export default class Html2dom {
-	static varKeyword = "var";			// How to declare variables. var, let, const
-	static suffixOnes = false;			// Whether to add a number to the end of variable names
-	static CRLF = "\r\n";				// How to represent a newline : "\n", "\r\n", "\r"
-	static semicolon = true;			// Whether to add a semicolon at the end of each line
-	static compoundAppendChild = true;	// Whether to use appendChild and createElement together
-	static compoundClassListAdd = true;	// Whether to use multiple classList.add or multiple arguments
-	static forceInnerHTML = false;		// Whether to use innerHTML instead of textContent
-	static forceSetAttribute = false;	// Whether to use setAttribute instead of direct assignment
-	static forceSetProperty = false;	// Whether to use style.setProperty instead of direct assignment
-	static appendTextNode = false;		// Whether to use createTextNode and appendChild
-	static declarationsOnTop = true;	// Whether to declare all variables at the top of the code (for var only)
+	static LINEFEEDS = { "LF": "\n", "CRLF": "\r\n", "CR": "\r" };
+	static options = {
+		varKeyword: "const",		// How to declare variables. var, let, const
+		suffixOnes: false,			// Whether to add a number to the end of variable names
+		linefeed: "CRLF",			// How to represent a newline : "\n", "\r\n", "\r"
+		textContent: "textContent",	// How to set text content : textContent, innerHTML, textNode
+		semicolon: true,			// Whether to add a semicolon at the end of each line
+		compoundAppendChild: true,	// Whether to use appendChild and createElement together
+		compoundClassListAdd: true,	// Whether to use multiple classList.add or multiple arguments
+		classAsAttribute: false,	// Whether to use setAttribute("class", "className") or classList.add("className")
+		styleAsAttribute: false,	// Whether to use setAttribute("style", "prop: val;") or style.setProperty("prop", "val")
+		forceSetAttribute: false,	// Whether to use setAttribute instead of direct assignment
+		forceSetProperty: false,	// Whether to use style.setProperty instead of direct assignment
+		declarationsOnTop: true,	// Whether to declare all variables at the top of the code (for var only)
+		quoteStyle: "double"		// Whether to use single, double or backticks quotes
+	};
 	/**
 	 * Translates the given string into DOM elements.
 	 * 
@@ -25,14 +30,14 @@ export default class Html2dom {
 		const nodes = Array.from(dom.childNodes);
 		nodes.forEach(node => {
 			const varName = this.varName(node);
-			result.push(`${this.varKeyword} ${varName} = document.createElement("${node.localName}");`);
+			result.push(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})${this.sc}`);
 			result.push(...this.translateAttributes(node, varName));
 			result.push(...this.translateContent(node.childNodes, varName));
-			if (this.varKeyword === "var") {
+			if (this.options.varKeyword === "var") {
 				this.removeVariable(varName);
 			}
 		});
-		if (this.declarationsOnTop && this.varKeyword === "var") {
+		if (this.options.declarationsOnTop && this.options.varKeyword === "var") {
 			let varnames = result.map(line => line.match(/^var (\w+)/)).filter(match => match).map(match => match[1]);
 			// Remove duplicates
 			varnames = varnames.filter((name, index) => varnames.indexOf(name) === index);
@@ -40,9 +45,18 @@ export default class Html2dom {
 				result[i] = line.replace(/^var\s+/, "");
 			});
 			result.unshift(``);
-			result.unshift(`var ${varnames.join(", ")};`);
+			result.unshift(`var ${varnames.join(", ")}${this.sc}`);
 		}
-		return result.join(this.CRLF);
+		return result.join(this.LINEFEEDS[this.options.linefeed]);
+	}
+	static get sc() {
+		return this.options.semicolon ? ";" : "";
+	}
+	static getOption(name, defaultValue) {
+		return this.options[name] !== undefined ? this.options[name] : defaultValue;
+	}
+	static setOption(name, value) {
+		this.options[name] = value;
 	}
 	static translateAttributes(node, varName) {
 		const result = [];
@@ -56,33 +70,69 @@ export default class Html2dom {
 			} else if (name === "style") {
 				result.push(...this.translateStyles(value, varName));
 			} else {
-				result.push(`${varName}.setAttribute("${name}", "${value}");`);
+				result.push(`${varName}.${this.attributeInstruction(name, value)}${this.sc}`);
 			}
 		});
 		return result;
 	}
+	static attributeInstruction(name, value) {
+		if (this.options.forceSetAttribute) {
+			return `setAttribute(${this.q(name)}, ${this.q(value)})`;
+		}
+		if (name.slice(0, 5) === "data-") {
+			return `dataset.${this.toCamelCase(name.slice(5))} = ${this.q(value)}`;
+		}
+		if (name.indexOf("-") !== -1) {
+			return `setAttribute(${this.q(name)}, ${this.q(value)})`;
+		}
+		if (name === "class") {
+			return `className = ${this.q(value)}`;
+		}
+		if (name === "style") {
+			return `style.cssText = ${this.q(value)}`;
+		}
+		if (name === "for") {
+			return `htmlFor = ${this.q(value)}`;
+		}
+		return `${name} = ${this.q(value)}`;
+	}
+	static q(str) {
+		switch (this.options.quoteStyle) {
+			case "single": return `'${str.replace(/'/g, "\\'")}'`;
+			case "double": return `"${str.replace(/"/g, '\\"')}"`;
+			case "backticks": return `\`${str.replace(/`/g, "\\`")}\``;
+		}
+	}
 	static translateClasses(classes, varName) {
 		const result = [];
+		if (this.options.classAsAttribute) {
+			result.push(`${varName}.${this.attributeInstruction("class", classes)}${this.sc}`);
+			return result;
+		}
 		classes = classes.trim().split(/\s+/);
-		if (this.compoundClassListAdd) {
-			result.push(`${varName}.classList.add(${classes.map(className => `"${className}"`).join(", ")});`);
+		if (this.options.compoundClassListAdd) {
+			result.push(`${varName}.classList.add(${classes.map(className => `${this.q(className)}`).join(", ")})${this.sc}`);
 			return result;
 		}
 		classes.forEach(className => {
-			result.push(`${varName}.classList.add("${className}");`);
+			result.push(`${varName}.classList.add(${this.q(className)})${this.sc}`);
 		});
 		return result;
 	}
 	static translateStyles(styles, varName) {
 		const result = [];
+		if (this.options.styleAsAttribute) {
+			result.push(`${varName}.${this.attributeInstruction("style", styles)}${this.sc}`);
+			return result;
+		}
 		styles = styles.trim().replace(/;$/, "").split(/(?:\s*;\s*)+/);
 		styles.forEach(style => {
 			const [propName, propVal] = style.split(/\s*:\s*/);
-			if (propName.substr(0, 2) === "--" || this.forceSetProperty) {
-				result.push(`${varName}.style.setProperty("${propName}", "${propVal}");`);
+			if (propName.substr(0, 2) === "--" || this.options.forceSetProperty) {
+				result.push(`${varName}.style.setProperty(${this.q(propName)}, ${this.q(propVal)})${this.sc}`);
 			} else {
 				let camel = this.toCamelCase(propName);
-				result.push(`${varName}.style.${camel} = "${propVal}";`);
+				result.push(`${varName}.style.${camel} = ${this.q(propVal)}${this.sc}`);
 			}
 		});
 		return result;
@@ -109,7 +159,7 @@ export default class Html2dom {
 			this.variables[varName] = 0;
 		}
 		this.variables[varName] += 1;
-		if (this.variables[varName] === 1 && !this.suffixOnes) {
+		if (this.variables[varName] === 1 && !this.options.suffixOnes) {
 			return varName;
 		}
 		return varName + this.variables[varName];
@@ -124,33 +174,44 @@ export default class Html2dom {
 	static translateTextNode(node, parentName, appendChild = true) {
 		node = node.nodeValue || node;
 		node = node.replace(/\s+/g, " ");
+		let result;
 		if (!parentName) {
-			return [`document.createTextNode("${node}");`];
+			result = `document.createTextNode(${this.q(node)})`;
 		} else if (appendChild) {
-			return [`${parentName}.appendChild(document.createTextNode("${node}"));`];
+			result = `${parentName}.appendChild(document.createTextNode(${this.q(node)}))`;
+		} else if (this.options.textContent === "innerHTML") {
+			result = `${parentName}.innerHTML = ${this.q(node)}`;
+		} else if (this.options.textContent === "textNode") {
+			result = `${parentName}.appendChild(document.createTextNode(${this.q(node)}))`;
 		} else {
-			return [`${parentName}.textContent = "${node}";`];
+			result = `${parentName}.textContent = ${this.q(node)}`;
 		}
+		return [`${result}${this.sc}`];
 	}
 	static translateCommentNode(node, parentName) {
 		node = node.nodeValue || node;
+		let result;
 		if (parentName) {
-			return [`${parentName}.appendChild(document.createComment("${node}"));`];
+			result = `${parentName}.appendChild(document.createComment(${this.q(node)}))`;
 		} else {
-			return [`document.createComment("${node}");`];
+			result = `document.createComment(${this.q(node)})`;
 		}
+		return [`${result}${this.sc}`];
 	}
 	static translateElementNode(node, parentName) {
 		const varName = this.varName(node);
 		const result = [];
-		if (parentName) {
-			result.push(`${this.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement("${node.localName}"));`);
+		if (parentName && this.options.compoundAppendChild) {
+			result.push(`${this.options.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement(${this.q(node.localName)}))${this.sc}`);
 		} else {
-			result.push(`${this.varKeyword} ${varName} = document.createElement("${node.localName}");`);
+			result.push(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})${this.sc}`);
 		}
 		result.push(...this.translateAttributes(node, varName));
 		result.push(...this.translateContent(node.childNodes, varName));
-		if (this.varKeyword === "var") {
+		if (parentName && !this.options.compoundAppendChild) {
+			result.push(`${parentName}.appendChild(${varName})${this.sc}`);
+		}
+		if (this.options.varKeyword === "var") {
 			this.removeVariable(varName);
 		}
 		return result;
