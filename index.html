@@ -10,6 +10,7 @@
 	<script type="module">
 		import App from "./src/App.js";
 		App.load();
+		window.App = App;
 	</script>
 	<script src="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/src-min-noconflict/ace.min.js"></script>
 	<link href="https://cdn.jsdelivr.net/npm/ace-builds@1.35.4/css/ace.min.css " rel="stylesheet">
@@ -20,15 +21,16 @@
 	<div id="interface">
 		<header>
 			<h1><img src="img/logo_white.svg" alt=""><span>HTML<i>2</i>DOM</span></h1>
+			<!-- <a href="https://github.com/bobanum/Html2dom" target="_blank" class="ribbon" style="--width:15ch;--height:2em;">Github</a> -->
 		</header>
 		<div id="app">
 			<div action="#" id="html2dom">
 				<fieldset id="html">
-					<legend>HTML</legend>
+					<legend>HTML <button onclick="App.evt.clickCopyHtml.apply(this, arguments)">📋︎</button></legend>
 					<div id="in"></div>
 				</fieldset>
 				<fieldset id="dom">
-					<legend>Javascript</legend>
+					<legend>Javascript <button onclick="App.evt.clickPlay.apply(this, arguments)">▶</button> <button onclick="App.evt.clickCopyJs.apply(this, arguments)">📋︎</button></legend>
 					<div id="out"></div>
 				</fieldset>
 				<fieldset id="options">
@@ -150,16 +152,19 @@
 		<table id="resultat" border="1">
 			<!-- Il n'y a pas de thead -->
 			<tbody data-test="1" data-other-test="2" for="ffoorr">
-				<tr class="selecteur">
+				<tr class="selecteur with_double.under-scores">
 					<th>Sélecteur :</th>
 					<td style="color:red;  background-blend-mode: darken;"></td>
 				</tr>
-				<tr class="signification important">
+				<tr class="signifi.cation important">
 					<th>Signification &lt;:</th>
 					<td>Une balise ayant la <b>classe</b> <q>bas</q></td>
 				</tr>
 			</tbody>
 		</table>
+		loose text
+		<div>autre</div>
+		<h1>Vide</h1>
 	</div>
 </body>
 

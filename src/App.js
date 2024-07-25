@@ -1,7 +1,5 @@
 import Html2dom from "./Html2dom.js";
 
-//TODO: Add a button to copy the result to the clipboard
-//TODO: Add a button to view the result in a new window
 export default class App {
 	static main() {
 		this.getOptions();
@@ -67,4 +65,37 @@ export default class App {
 			return this.main(data);
 		});
 	}
+	static addBackdrop(text) {
+		console.log(text);
+		const backdrop = document.createElement("div");
+		backdrop.classList.add("backdrop");
+		backdrop.classList.add("off");
+		const script = document.createElement("iframe");
+		backdrop.appendChild(script);
+		document.body.appendChild(backdrop);
+		script.contentWindow.document.write(`<body><script>${text}</script></body>`);
+		backdrop.addEventListener("click", e => {
+			backdrop.classList.add("off");
+			backdrop.addEventListener("transitionend", e => {
+				document.body.removeChild(backdrop);
+			}, { once: true });
+		});
+		setTimeout(() => {
+			backdrop.classList.remove("off");
+		}, 10);
+		return backdrop;
+	}
+	static evt = {
+		clickCopyJs: e => {
+			const text = this.editorJs.getValue();
+			navigator.clipboard.writeText(text);
+		},
+		clickCopyHtml: e => {
+			const text = this.editorHTML.getValue();
+			navigator.clipboard.writeText(text);
+		},
+		clickPlay: e => {
+			this.addBackdrop(this.editorJs.getValue());
+		},
+	};
 }
