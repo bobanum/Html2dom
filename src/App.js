@@ -2,7 +2,6 @@ import Html2dom from "./Html2dom.js";
 
 //TODO: Add a button to copy the result to the clipboard
 //TODO: Add a button to view the result in a new window
-//TODO: quotes styles
 export default class App {
 	static main() {
 		this.getOptions();
@@ -17,23 +16,6 @@ export default class App {
 			} else {
 				Html2dom.setOption(e.target.name, e.target.value);
 			}
-			// switch (e.target.name) {
-			// 	case "suffixOnes":
-			// 	case "semicolon":
-			// 	case "compoundAppendChild":
-			// 	case "compoundClassListAdd":
-			// 	case "forceSetAttribute":
-			// 	case "forceSetProperty":
-			// 	case "appendTextNode":
-			// 	case "declarationsOnTop":
-			// 		Html2dom.setOption(e.target.name, e.target.checked);
-			// 		break;
-			// 	case "varKeyword":
-			// 	case "textContent":
-			// 	case "linefeed":
-			// 		Html2dom.setOption(e.target.name, e.target.value);
-			// 		break;
-			// }
 			this.update();
 		});
 	}

@@ -13,7 +13,7 @@
 
 fieldset {
 	border: 1px solid white;
-	padding: .1rem;
+	padding: .5rem;
 	border-radius: .5rem;
 }
 
@@ -39,4 +39,8 @@ legend {
 
 .ace_editor {
 	height: 100%;
+	background-color: transparent;
+	.ace_gutter {
+		background-color: #0002;
+	}
 }

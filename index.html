@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<link rel="icon" href="logo.svg">
+	<link rel="icon" href="img/logo.svg">
 	<link rel="stylesheet" href="css/style.css">
 	<script type="module">
 		import App from "./src/App.js";
@@ -19,7 +19,7 @@
 <body>
 	<div id="interface">
 		<header>
-			<h1><img src="logo_white.svg" alt=""><span>HTML<i>2</i>DOM</span></h1>
+			<h1><img src="img/logo_white.svg" alt=""><span>HTML<i>2</i>DOM</span></h1>
 		</header>
 		<div id="app">
 			<div action="#" id="html2dom">
@@ -36,7 +36,7 @@
 					<form>
 						<div>
 							<label for="varKeyword">Variable keyword</label>
-							<select name="varKeyword">
+							<select name="varKeyword" id="varKeyword">
 								<option selected>const</option>
 								<option>let</option>
 								<option>var</option>
@@ -46,19 +46,19 @@
 							</div>
 						</div>
 						<div>
-							<label for="textContent">Text Content</label>
-							<select name="textContent">
-								<option selected>textContent</option>
-								<option>innerHTML</option>
-								<option>textNode</option>
+							<label for="quoteStyle">Quote style</label>
+							<select name="quoteStyle" id="quoteStyle">
+								<option selected value="double">""</option>
+								<option value="single">''</option>
+								<option value="backticks">``</option>
 							</select>
 							<div class="hint">
-								<div>How to set text content to element.</div>
+								<div>Whether to use single, double or backticks quotes</div>
 							</div>
 						</div>
 						<div>
 							<label for="linefeed">Linefeed</label>
-							<select name="linefeed">
+							<select name="linefeed" id="linefeed">
 								<option>CR</option>
 								<option selected>CRLF</option>
 								<option>LF</option>
@@ -68,79 +68,77 @@
 							</div>
 						</div>
 						<div>
+							<label for="textContent">Text Content</label>
+							<select name="textContent" id="textContent">
+								<option selected>textContent</option>
+								<option>innerHTML</option>
+								<option>textNode</option>
+							</select>
+							<div class="hint">
+								<div>How to set text content to element.</div>
+							</div>
+						</div>
+						<div>
 							<label for="compoundAppendChild">Compound "appendChild"</label>
-							<div><input type="checkbox" name="compoundAppendChild" checked></div>
+							<div><input type="checkbox" name="compoundAppendChild" id="compoundAppendChild" checked></div>
 							<div class="hint">
 								<div>Whether to use appendChild and createElement together</div>
 							</div>
 						</div>
 						<div>
-							<label for="compoundClassListAdd">Compound "classList.add"</label>
-							<div><input type="checkbox" name="compoundClassListAdd" checked></div>
-							<div class="hint">
-								<div>Whether to use multiple classList.add or multiple arguments</div>
-							</div>
-						</div>
-						<div>
 							<label for="semicolon">Semicolons</label>
-							<div><input type="checkbox" name="semicolon" checked></div>
+							<div><input type="checkbox" name="semicolon" id="semicolon" checked></div>
 							<div class="hint">
 								<div>Whether to add a semicolon at the end of each line</div>
 							</div>
 						</div>
 						<div>
-							<label for="suffixOnes">Suffixe Ones</label>
-							<div><input type="checkbox" name="suffixOnes"></div>
+							<label for="compoundClassListAdd">Compound "classList.add"</label>
+							<div><input type="checkbox" name="compoundClassListAdd" id="compoundClassListAdd"></div>
 							<div class="hint">
-								<div>Whether to add a number to the end of variable names</div>
+								<div>Whether to use multiple classList.add or multiple arguments</div>
 							</div>
 						</div>
 						<div>
 							<label for="forceSetAttribute">Force setAttribute</label>
-							<div><input type="checkbox" name="forceSetAttribute"></div>
+							<div><input type="checkbox" name="forceSetAttribute" id="forceSetAttribute"></div>
 							<div class="hint">
 								<div>Whether to use setAttribute instead of direct assignment</div>
 							</div>
 						</div>
-						<!-- // classAsAttribute: false, // !!Whether to use setAttribute("class", "className") or classList.add("className") -->
 						<div>
 							<label for="classAsAttribute">Class as attribute</label>
-							<div><input type="checkbox" name="classAsAttribute"></div>
+							<div><input type="checkbox" name="classAsAttribute" id="classAsAttribute"></div>
 							<div class="hint">
 								<div>Whether to use setAttribute("class", "className") or classList.add("className")</div>
 							</div>
 						</div>
-						<!-- // styleAsAttribute: false, // !!Whether to use setAttribute("style", "prop: val;") or style.setProperty("prop", "val") -->
 						<div>
 							<label for="styleAsAttribute">Style as attribute</label>
-							<div><input type="checkbox" name="styleAsAttribute"></div>
+							<div><input type="checkbox" name="styleAsAttribute" id="styleAsAttribute"></div>
 							<div class="hint">
 								<div>Whether to use setAttribute("style", "prop: val;") or style.setProperty("prop", "val")</div>
 							</div>
 						</div>
 						<div>
 							<label for="forceSetProperty">Force setProperty</label>
-							<div><input type="checkbox" name="forceSetProperty"></div>
+							<div><input type="checkbox" name="forceSetProperty" id="forceSetProperty"></div>
 							<div class="hint">
 								<div>Whether to use style.setProperty instead of direct assignment</div>
 							</div>
 						</div>
 						<div>
 							<label for="declarationsOnTop">Declarations on top</label>
-							<div><input type="checkbox" name="declarationsOnTop" checked></div>
+							<div><input type="checkbox" name="declarationsOnTop" id="declarationsOnTop"></div>
 							<div class="hint">
 								<div>Whether to declare all variables at the top of the code (for var only) </div>
 							</div>
 						</div>
 						<div>
-							<label for="quoteStyle">Quote style</label>
-							<select name="quoteStyle">
-								<option selected value="double">""</option>
-								<option value="single">''</option>
-								<option value="backticks">``</option>
-							</select>
+							<label for="suffixOnes">Suffixe Ones</label>
+							<div><input type="checkbox" name="suffixOnes" id="suffixOnes"></div>
 							<div class="hint">
-								<div>Whether to use single, double or backticks quotes</div>
+								<div>Whether to add a number to the end of variable names</div>
 							</div>
 						</div>
 					</form>

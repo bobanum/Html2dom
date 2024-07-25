@@ -3,8 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 :root {
-  --h: 120;
-  --s: 10%;
+  --h: 300;
+  --s: 15%;
   --l: 20%;
   --d: 90%;
   --font-text: "Roboto", sans-serif;
@@ -58,12 +58,31 @@ svg use {
   padding: 1rem;
 }
 #interface > header {
-  padding-bottom: 0;
   font-size: 1.2em;
   color: #fff;
+  background-color: hsl(var(--h), var(--s), calc(var(--l) - 5%));
+}
+#interface > header::before {
+  font-size: smaller;
+  content: "Fork me";
+  background-color: #990;
+  width: 20ch;
+  height: 2.84em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: center;
+  transform: rotate(45deg);
+  transform-origin: top right;
+  transform: translate(2em, calc(14.0845070423ch - 2em)) rotate(45deg);
+  background-image: linear-gradient(-135deg, rgba(0, 0, 0, 0.4) 2em, 2.2em, transparent 3em), linear-gradient(135deg, white 2em, 2.2em, rgba(255, 255, 255, 0) 3em);
 }
 #interface > header img {
   height: 1.5em;
+  margin: -0.5em 0;
 }
 #interface > header h1 {
   display: flex;
@@ -74,7 +93,7 @@ svg use {
 #interface > header h1 i {
   display: inline-block;
   font-size: 1.5em;
-  color: #ffa500;
+  color: #d45500;
   transform: translate(-0.1em, 0.1em);
   line-height: 0;
 }
@@ -103,7 +122,7 @@ svg use {
 
 fieldset {
   border: 1px solid white;
-  padding: 0.1rem;
+  padding: 0.5rem;
   border-radius: 0.5rem;
 }
 
@@ -130,6 +149,10 @@ legend {
 
 .ace_editor {
   height: 100%;
+  background-color: transparent;
+}
+.ace_editor .ace_gutter {
+  background-color: rgba(0, 0, 0, 0.1333333333);
 }
 
 #options {

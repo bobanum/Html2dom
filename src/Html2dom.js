@@ -30,7 +30,7 @@ export default class Html2dom {
 		const nodes = Array.from(dom.childNodes);
 		nodes.forEach(node => {
 			const varName = this.varName(node);
-			result.push(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})${this.sc}`);
+			result.push(this.i(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})`));
 			result.push(...this.translateAttributes(node, varName));
 			result.push(...this.translateContent(node.childNodes, varName));
 			if (this.options.varKeyword === "var") {
@@ -45,7 +45,7 @@ export default class Html2dom {
 				result[i] = line.replace(/^var\s+/, "");
 			});
 			result.unshift(``);
-			result.unshift(`var ${varnames.join(", ")}${this.sc}`);
+			result.unshift(this.i(`var ${varnames.join(", ")}`));
 		}
 		return result.join(this.LINEFEEDS[this.options.linefeed]);
 	}
@@ -70,7 +70,7 @@ export default class Html2dom {
 			} else if (name === "style") {
 				result.push(...this.translateStyles(value, varName));
 			} else {
-				result.push(`${varName}.${this.attributeInstruction(name, value)}${this.sc}`);
+				result.push(this.i(`${varName}.${this.attributeInstruction(name, value)}`));
 			}
 		});
 		return result;
@@ -103,36 +103,39 @@ export default class Html2dom {
 			case "backticks": return `\`${str.replace(/`/g, "\\`")}\``;
 		}
 	}
+	static i(str) {
+		return str + (this.options.semicolon ? ";" : "");
+	}
 	static translateClasses(classes, varName) {
 		const result = [];
 		if (this.options.classAsAttribute) {
-			result.push(`${varName}.${this.attributeInstruction("class", classes)}${this.sc}`);
+			result.push(this.i(`${varName}.${this.attributeInstruction("class", classes)}`));
 			return result;
 		}
 		classes = classes.trim().split(/\s+/);
 		if (this.options.compoundClassListAdd) {
-			result.push(`${varName}.classList.add(${classes.map(className => `${this.q(className)}`).join(", ")})${this.sc}`);
+			result.push(this.i(`${varName}.classList.add(${classes.map(className => `${this.q(className)}`).join(", ")})`));
 			return result;
 		}
 		classes.forEach(className => {
-			result.push(`${varName}.classList.add(${this.q(className)})${this.sc}`);
+			result.push(this.i(`${varName}.classList.add(${this.q(className)})`));
 		});
 		return result;
 	}
 	static translateStyles(styles, varName) {
 		const result = [];
 		if (this.options.styleAsAttribute) {
-			result.push(`${varName}.${this.attributeInstruction("style", styles)}${this.sc}`);
+			result.push(this.i(`${varName}.${this.attributeInstruction("style", styles)}`));
 			return result;
 		}
 		styles = styles.trim().replace(/;$/, "").split(/(?:\s*;\s*)+/);
 		styles.forEach(style => {
 			const [propName, propVal] = style.split(/\s*:\s*/);
 			if (propName.substr(0, 2) === "--" || this.options.forceSetProperty) {
-				result.push(`${varName}.style.setProperty(${this.q(propName)}, ${this.q(propVal)})${this.sc}`);
+				result.push(this.i(`${varName}.style.setProperty(${this.q(propName)}, ${this.q(propVal)})`));
 			} else {
 				let camel = this.toCamelCase(propName);
-				result.push(`${varName}.style.${camel} = ${this.q(propVal)}${this.sc}`);
+				result.push(this.i(`${varName}.style.${camel} = ${this.q(propVal)}`));
 			}
 		});
 		return result;
@@ -186,7 +189,7 @@ export default class Html2dom {
 		} else {
 			result = `${parentName}.textContent = ${this.q(node)}`;
 		}
-		return [`${result}${this.sc}`];
+		return [this.i(result)];
 	}
 	static translateCommentNode(node, parentName) {
 		node = node.nodeValue || node;
@@ -196,20 +199,20 @@ export default class Html2dom {
 		} else {
 			result = `document.createComment(${this.q(node)})`;
 		}
-		return [`${result}${this.sc}`];
+		return [this.i(result)];
 	}
 	static translateElementNode(node, parentName) {
 		const varName = this.varName(node);
 		const result = [];
 		if (parentName && this.options.compoundAppendChild) {
-			result.push(`${this.options.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement(${this.q(node.localName)}))${this.sc}`);
+			result.push(this.i(`${this.options.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement(${this.q(node.localName)}))`));
 		} else {
-			result.push(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})${this.sc}`);
+			result.push(this.i(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})`));
 		}
 		result.push(...this.translateAttributes(node, varName));
 		result.push(...this.translateContent(node.childNodes, varName));
 		if (parentName && !this.options.compoundAppendChild) {
-			result.push(`${parentName}.appendChild(${varName})${this.sc}`);
+			result.push(this.i(`${parentName}.appendChild(${varName})`));
 		}
 		if (this.options.varKeyword === "var") {
 			this.removeVariable(varName);

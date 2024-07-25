@@ -13,12 +13,32 @@
     }
 
     > header {
-        padding-bottom: 0;
         font-size: 1.2em;
         color: #fff;
-
+        background-color: hsl(var(--h), var(--s), calc(var(--l) - 5%));
+        &::before {
+            font-size: smaller;
+            content: 'Fork me';
+            background-color: #990;
+            width: 20ch;
+            height: 2.84em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 0;
+            top: 0;
+            // color: black;
+            text-align: center;
+            transform: rotate(45deg);
+            transform-origin: top right;
+            transform: translate(2em,calc(20ch / 1.42 - 2em)) rotate(45deg);
+            background-image: linear-gradient(-135deg, #0006 2em, 2.2em, transparent 3em), 
+            linear-gradient(135deg, #FFFF 2em, 2.2em, #FFF0 3em);
+        }
         img {
             height: 1.5em;
+            margin: -.5em 0;
         }
         
         h1 {
@@ -29,7 +49,7 @@
             i {
                 display: inline-block;
                 font-size: 1.5em;
-                color: #ffa500;
+                color: #d45500;
                 transform: translate(-.1em, .1em);
                 line-height: 0;
             }
@@ -41,10 +61,6 @@
     }
 }
 
-// header, footer {
-// color: hsl(var(--h), var(--s), calc(var(--l) + 50%));
-// background-color: hsl(var(--h), var(--s), calc(var(--l) - 10%));
-// }
 #app {
     flex-grow: 1;
 }
