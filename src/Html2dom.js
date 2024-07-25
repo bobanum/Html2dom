@@ -26,9 +26,16 @@ export default class Html2dom {
 		const dom = document.createElement("div");
 		dom.innerHTML = str;
 		this.variables = {};
+		const topVars = [];
 		const result = [];
 		const nodes = Array.from(dom.childNodes);
 		nodes.forEach(node => {
+			if (node.nodeType === 3) {
+				let value = node.nodeValue.trim();
+				if (!value) return;
+				result.push(...this.translateTextNode(value, "document.body", true));
+				return;
+			}
 			const varName = this.varName(node);
 			result.push(this.i(`${this.options.varKeyword} ${varName} = document.createElement(${this.q(node.localName)})`));
 			result.push(...this.translateAttributes(node, varName));
@@ -36,6 +43,7 @@ export default class Html2dom {
 			if (this.options.varKeyword === "var") {
 				this.removeVariable(varName);
 			}
+			result.push(this.i(`document.body.appendChild(${varName})`));
 		});
 		if (this.options.declarationsOnTop && this.options.varKeyword === "var") {
 			let varnames = result.map(line => line.match(/^var (\w+)/)).filter(match => match).map(match => match[1]);
@@ -97,6 +105,9 @@ export default class Html2dom {
 		return `${name} = ${this.q(value)}`;
 	}
 	static q(str) {
+		if (!str) {
+			return "";
+		}
 		switch (this.options.quoteStyle) {
 			case "single": return `'${str.replace(/'/g, "\\'")}'`;
 			case "double": return `"${str.replace(/"/g, '\\"')}"`;
@@ -140,8 +151,8 @@ export default class Html2dom {
 		});
 		return result;
 	}
-	static toCamelCase(str) {
-		return str.split("-").map((part, index) => index ? part[0].toUpperCase() + part.substr(1) : part).join("");
+	static toCamelCase(str, separator = "-._") {
+		return str.split(new RegExp(`[${separator}]`)).map((part, index) => index ? part[0].toUpperCase() + part.substr(1) : part).join("");
 	}
 	static varName(node) {
 		let varName = node.localName || node.nodeName;
@@ -152,11 +163,10 @@ export default class Html2dom {
 			return "#comment";
 		}
 		if (node.getAttribute("id")) {
-			varName = node.getAttribute("id");
-			return varName;
+			varName = this.toCamelCase(node.getAttribute("id"));
 		}
 		if (node.getAttribute("class")) {
-			varName = node.getAttribute("class").trim().split(/\s+/).sort().join("_");
+			varName = node.getAttribute("class").trim().split(/\s+/).sort().map(c => this.toCamelCase(c)).join("_");
 		}
 		if (this.variables[varName] === undefined) {
 			this.variables[varName] = 0;
@@ -202,7 +212,9 @@ export default class Html2dom {
 		return [this.i(result)];
 	}
 	static translateElementNode(node, parentName) {
+		console.log(216,this.variables);
 		const varName = this.varName(node);
+		console.log(218,this.variables);
 		const result = [];
 		if (parentName && this.options.compoundAppendChild) {
 			result.push(this.i(`${this.options.varKeyword} ${varName} = ${parentName}.appendChild(document.createElement(${this.q(node.localName)}))`));

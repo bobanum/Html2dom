@@ -1,0 +1,23 @@
+.ribbon {
+	--width: 20ch;
+	--height: 1.84em;
+	--h2: calc(var(--height) * 0.7);
+	font-size: smaller;
+	background-color: #990;
+	box-shadow: 0 .5em .5em -.3em #000;
+	width: var(--width);
+	height: var(--height);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	right: 0;
+	top: 0;
+	text-align: center;
+	transform: rotate(45deg);
+	transform-origin: top right;
+	transform: translate(var(--h2),calc(var(--width) * 0.7 - var(--h2))) rotate(45deg);
+	background-image: linear-gradient(-135deg, #0006 var(--h2), calc(var(--h2) + .2rem), transparent calc(var(--h2) + 1rem)), 
+	linear-gradient(135deg, #FFFF var(--h2), calc(var(--h2) + .2rem), #FFF0 calc(var(--h2) + 1rem));
+	z-index: 1000;
+}
