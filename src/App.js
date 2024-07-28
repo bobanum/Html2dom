@@ -47,8 +47,8 @@ export default class App {
 		editor.setTheme("ace/theme/monokai");
 		editor.setFontSize(16);
 		editor.session.setMode(`ace/mode/${mode}`);
+		// editor.session.setUseWrapMode(true);
 		return editor;
-
 	}
 	static addJsEditor() {
 		const editor = this.createEditor("out", "javascript");

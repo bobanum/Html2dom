@@ -27,7 +27,6 @@ export default class Html2dom {
 		const dom = document.createElement("div");
 		dom.innerHTML = str;
 		this.variables = {};
-		const topVars = [];
 		const result = [];
 		const nodes = Array.from(dom.childNodes);
 		result.push(...this.translateContent(nodes, this.options.addToBody ? "document.body" : null));
@@ -49,6 +48,30 @@ export default class Html2dom {
 	}
 	static setOption(name, value) {
 		this.options[name] = value;
+	}
+	static translateContent(nodes, parentName) {
+		var result = [];
+		nodes = Array.from(nodes);
+		nodes = nodes.filter(node => node.nodeType !== 3 || node.nodeValue.trim()); //TODO Check for valid spaces between tags
+		if (nodes.length === 1 && nodes[0].nodeType === 3) {
+			result.push(this.translateTextNode(nodes[0], parentName, false));
+			return result;
+		}
+		nodes.forEach(node => {
+			const nodeType = node.nodeType;
+			switch (nodeType) {
+				case 1: // Element
+					result.push(...this.translateElementNode(node, parentName));
+					break;
+				case 3: // Text
+					result.push(this.translateTextNode(node, parentName));
+					break;
+				case 8: // Comment
+					result.push(this.translateCommentNode(node, parentName));
+					break;
+			}
+		});
+		return result;
 	}
 	static translateAttributes(node, varName) {
 		const result = [];
@@ -139,27 +162,30 @@ export default class Html2dom {
 		return str.split(new RegExp(`[${separator}]`)).map((part, index) => index ? part[0].toUpperCase() + part.substr(1) : part).join("");
 	}
 	static varName(node) {
-		let varName = node.localName || node.nodeName;
-		if (!varName || varName === "#text") {
-			return "text";
+		if (typeof node === "string") {
+			if (this.variables[node] === undefined) {
+				this.variables[node] = 0;
+			}
+			this.variables[node] += 1;
+			if (this.variables[node] === 1 && !this.options.suffixOnes) {
+				return node;
+			}
+			return node + this.variables[node];
 		}
-		if (varName === "#comment") {
-			return "comment";
+		if (node.nodeType === 3) {
+			return this.varName("text");
+		} else if (node.nodeType === 8) {
+			return this.varName("comment");
+		} else if (node.hasAttribute("id")) {
+			return this.toCamelCase(node.getAttribute("id"));
+		} else if (node.hasAttribute("class")) {
+			return this.classToName(node.getAttribute("class"));
+		} else {
+			return node.localName;
 		}
-		if (node.getAttribute("id")) {
-			varName = this.toCamelCase(node.getAttribute("id"));
-		}
-		if (node.getAttribute("class")) {
-			varName = node.getAttribute("class").trim().split(/\s+/).sort().map(c => this.toCamelCase(c)).join("_");
-		}
-		if (this.variables[varName] === undefined) {
-			this.variables[varName] = 0;
-		}
-		this.variables[varName] += 1;
-		if (this.variables[varName] === 1 && !this.options.suffixOnes) {
-			return varName;
-		}
-		return varName + this.variables[varName];
+	}
+	static classToName(className) {
+		return className.trim().split(/\s+/).sort().map(c => this.toCamelCase(c)).join("_");
 	}
 	static removeVariable(varName) {
 		varName = varName.replace(/[0-9]+$/, "");
@@ -171,19 +197,21 @@ export default class Html2dom {
 	static translateTextNode(node, parentName, appendChild = true) {
 		node = node.nodeValue || node;
 		node = node.replace(/\s+/g, " ");
+		node = this.q(node);
 		let result;
+		// TODO: Check putting in a variable for root texts
 		if (!parentName) {
-			result = `document.createTextNode(${this.q(node)})`;
+			result = `document.createTextNode(${node})`;
 		} else if (appendChild) {
-			result = `${parentName}.appendChild(document.createTextNode(${this.q(node)}))`;
+			result = `${parentName}.appendChild(document.createTextNode(${node}))`;
 		} else if (this.options.textContent === "innerHTML") {
-			result = `${parentName}.innerHTML = ${this.q(node)}`;
+			result = `${parentName}.innerHTML = ${node}`;
 		} else if (this.options.textContent === "textNode") {
-			result = `${parentName}.appendChild(document.createTextNode(${this.q(node)}))`;
+			result = `${parentName}.appendChild(document.createTextNode(${node}))`;
 		} else {
-			result = `${parentName}.textContent = ${this.q(node)}`;
+			result = `${parentName}.textContent = ${node}`;
 		}
-		return [this.i(result)];
+		return this.i(result);
 	}
 	static translateCommentNode(node, parentName) {
 		node = node.nodeValue || node;
@@ -193,7 +221,7 @@ export default class Html2dom {
 		} else {
 			result = `document.createComment(${this.q(node)})`;
 		}
-		return [this.i(result)];
+		return this.i(result);
 	}
 	static translateElementNode(node, parentName) {
 		const varName = this.varName(node);
@@ -211,30 +239,6 @@ export default class Html2dom {
 		if (this.options.varKeyword === "var") {
 			this.removeVariable(varName);
 		}
-		return result;
-	}
-	static translateContent(nodes, parentName) {
-		var result = [];
-		nodes = Array.from(nodes);
-		nodes = nodes.filter(node => node.nodeType !== 3 || node.nodeValue.trim()); //TODO Check for valid spaces between tags
-		if (nodes.length === 1 && nodes[0].nodeType === 3) {
-			result.push(...this.translateTextNode(nodes[0], parentName, false));
-			return result;
-		}
-		nodes.forEach(node => {
-			const nodeType = node.nodeType;
-			switch (nodeType) {
-				case 1: // Element
-					result.push(...this.translateElementNode(node, parentName));
-					break;
-				case 3: // Text
-					result.push(...this.translateTextNode(node, parentName));
-					break;
-				case 8: // Comment
-					result.push(...this.translateCommentNode(node, parentName));
-					break;
-			}
-		});
 		return result;
 	}
 }
