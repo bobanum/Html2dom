@@ -22,15 +22,23 @@
 		<header>
 			<h1><img src="img/logo_white.svg" alt=""><span>HTML<i>2</i>DOM</span></h1>
 			<!-- <a href="https://github.com/bobanum/Html2dom" target="_blank" class="ribbon" style="--width:15ch;--height:2em;">Github</a> -->
+			 <blockquote>
+				Add your HTML... collect your Javascript.
+			 </blockquote>
 		</header>
 		<div id="app">
 			<div action="#" id="html2dom">
 				<fieldset id="html">
-					<legend>HTML <button onclick="App.evt.clickCopyHtml.apply(this, arguments)">📋︎</button></legend>
+					<legend>HTML
+						<button onclick="App.evt.clickCopyHtml.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
+					</legend>
 					<div id="in"></div>
 				</fieldset>
 				<fieldset id="dom">
-					<legend>Javascript <button onclick="App.evt.clickPlay.apply(this, arguments)">▶</button> <button onclick="App.evt.clickCopyJs.apply(this, arguments)">📋︎</button></legend>
+					<legend>Javascript 
+						<button onclick="App.evt.clickPlay.apply(this, arguments)" title="Preview">▶</button>
+						<button onclick="App.evt.clickCopyJs.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
+					</legend>
 					<div id="out"></div>
 				</fieldset>
 				<fieldset id="options">
@@ -78,6 +86,13 @@
 							</select>
 							<div class="hint">
 								<div>How to set text content to element.</div>
+							</div>
+						</div>
+						<div>
+							<label for="addToBody">Append to to "body"</label>
+							<div><input type="checkbox" name="addToBody" id="addToBody" checked></div>
+							<div class="hint">
+								<div>Whether to use append the elements to "document.body".</div>
 							</div>
 						</div>
 						<div>
@@ -148,24 +163,31 @@
 			</div>
 		</div>
 	</div>
-	<div id="exemple">
-		<table id="resultat" border="1">
-			<!-- Il n'y a pas de thead -->
-			<tbody data-test="1" data-other-test="2" for="ffoorr">
-				<tr class="selecteur with_double.under-scores">
-					<th>Sélecteur :</th>
-					<td style="color:red;  background-blend-mode: darken;"></td>
-				</tr>
-				<tr class="signifi.cation important">
-					<th>Signification &lt;:</th>
-					<td>Une balise ayant la <b>classe</b> <q>bas</q></td>
-				</tr>
-			</tbody>
-		</table>
-		loose text
-		<div>autre</div>
-		<h1>Vide</h1>
-	</div>
+	<div id="example"><!-- This is an example of HTML code -->
+<header>
+	<h1 class="header-title" style="font-size: 2em; color: #333;">HTML Syntax Example</h1>
+	<nav>
+		<a href="#" class="nav-item" style="display: inline-block; margin-right: 10px;">Home</a>
+		<a href="#" class="nav-item active" style="font-weight: bold;">About</a>
+		<a href="#" class="nav-item">Contact</a>
+	</nav>
+</header>
+<div class="main-container" style="background-color: #f9f9f9; padding: 20px;">
+
+	<section class="content-section">
+		<article id="uniqueElement">
+			<h2 class="special_class">Article Heading</h2>
+			<p>This is a paragraph within the article. It contains <span class="hyphenated-class-name" style="font-style: italic;">italic text</span> and <span class="class_with_underscore">underlined text</span>.</p>
+			<div id="another-unique-id" class="period class name" style="background-color: #eee; padding: 10px;">
+				This div has a combination of classes and an id.
+			</div>
+		</article>
+	</section>
+
+	<footer>
+		<p class="footer-text">© 2024 Example. All rights reserved.</p>
+	</footer>
+</div></div>
 </body>
 
 </html>

@@ -36,7 +36,7 @@ export default class App {
 	}
 	static addHtmlEditor() {
 		const editor = this.createEditor("in");
-		editor.setValue(window.exemple.innerHTML, -1);
+		editor.setValue(window.example.innerHTML, -1);
 		editor.getSession().on('change', () => {
 			this.update();
 		});
@@ -66,7 +66,6 @@ export default class App {
 		});
 	}
 	static addBackdrop(text) {
-		console.log(text);
 		const backdrop = document.createElement("div");
 		backdrop.classList.add("backdrop");
 		backdrop.classList.add("off");
