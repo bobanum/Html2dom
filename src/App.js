@@ -109,5 +109,8 @@ export default class App {
 			const editor = this.editors[e.target.closest("fieldset").id];
 			editor.session.setUseWrapMode(checked);
 		},
+		clickOptionsClose: e => {
+			e.target.closest("fieldset").classList.toggle("closed");
+		}
 	};
 }

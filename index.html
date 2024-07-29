@@ -45,6 +45,7 @@
 				</fieldset>
 				<fieldset id="options">
 					<legend>Options</legend>
+					<div class="close" onclick="App.evt.clickOptionsClose.apply(this, arguments)"></div>
 					<form>
 						<div>
 							<label for="varKeyword">Variable keyword</label>
@@ -91,7 +92,7 @@
 							</div>
 						</div>
 						<div>
-							<label for="addToBody">Append to to "body"</label>
+							<label for="addToBody">Append to "body"</label>
 							<div><input type="checkbox" name="addToBody" id="addToBody" checked></div>
 							<div class="hint">
 								<div>Whether to use append the elements to "document.body".</div>

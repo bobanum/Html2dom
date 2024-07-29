@@ -1,12 +1,16 @@
 #options {
 	min-width: 250px;
+	position: relative;
 	> form {
 		padding: 1rem;
 		padding-top: .5em;
 		display: grid;
-		grid-template-columns: auto 1fr 1rem;
+		grid-template-columns: minmax(auto, 10em) 1fr 1rem;
 		gap: .5rem 1rem;
+		overflow-y: auto;
 		> * {
+			align-items: center;
+			align-content: center;
 			display: grid;
 			grid-column: span 3;
 			grid-template-columns: subgrid;
@@ -15,7 +19,7 @@
 	}
 	label {
 		&::after {
-			content: ' :';
+			content: '\a0:';
 		}
 	}
 	.hint {
@@ -46,5 +50,41 @@
 			align-items: center;
 			justify-content: center;
 		}
+	}
+	.close {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: .5em;
+		border: none;
+		border-radius: 1em;
+		width: .2em;
+		display: flex;
+		align-items: center;
+		justify-content: start;
+		&::before {
+			content: "⋮";
+			content: "\25B8\09\25B8\09\25B8"; // triangle right = 25B6 = 9654
+			// content: "\25b9"; // small triangle right =
+			border:1px solid white;
+			height: 5em;
+			width: .5em;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			line-height: 1;
+			border-right: none;
+			margin-left: -.5em;
+			border-radius: .25em 0 0 .25em;
+			background-color: inherit;
+		}
+		&:hover {
+			background-color: #Fff3;
+		}
+	}
+	&.closed {
+		height: 100%;
+		position: absolute;
+		// height: max-content;
 	}
 }
