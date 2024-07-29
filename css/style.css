@@ -3,8 +3,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;500;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 :root {
-  --h: 300;
-  --s: 15%;
+  --h: 240;
+  --s: 25%;
   --l: 20%;
   --d: 90%;
   --font-text: "Roboto", sans-serif;
@@ -19,6 +19,7 @@ html {
 
 body {
   min-height: 100vh;
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -79,24 +80,30 @@ svg use {
   transform: translate(-0.1em, 0.1em);
   line-height: 0;
 }
+#interface > header blockquote {
+  font-size: 0.8em;
+  margin: 0;
+  text-align: center;
+  font-style: italic;
+  margin-left: 5em;
+  margin-top: -0.3em;
+}
 #interface > footer {
   display: none;
 }
 
 #app {
-  flex-grow: 1;
-}
-
-#html2dom {
   display: grid;
   grid-template-columns: 1fr auto;
   grid-template-areas: "h o" "d o";
   gap: 1rem;
   padding: 1rem;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 @media (aspect-ratio > 2/1) {
-  #html2dom {
+  #app {
     grid-template-columns: 1fr 1fr auto;
     grid-template-areas: "h d o";
   }
@@ -111,6 +118,7 @@ fieldset {
 legend {
   padding: 0 0.5rem;
   margin: 0 0.5rem;
+  display: flex;
 }
 legend button {
   background-color: transparent;
@@ -119,8 +127,44 @@ legend button {
   border: none;
   display: inline-block;
   color: inherit;
+  cursor: pointer;
+}
+legend button:first-of-type {
+  margin-left: 1.5em;
+}
+legend button:hover {
+  color: #FF0;
+}
+legend button.checked {
+  color: #F80;
+}
+legend button.copyBtn.clicked {
+  color: #0F0;
+  animation-name: nod;
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
 }
 
+@keyframes nod {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    color: unset;
+    transform: scale(1);
+    opacity: 0;
+  }
+  100% {
+    color: unset;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 #html {
   grid-area: h;
 }
@@ -133,7 +177,7 @@ legend button {
   grid-area: o;
 }
 
-#exemple {
+#example {
   display: none;
 }
 
@@ -147,31 +191,40 @@ legend button {
 
 #options {
   min-width: 250px;
+  overflow-y: auto;
+  padding-top: 0.5rem;
+  padding: 1rem;
+  position: relative;
 }
 #options > form {
-  padding: 1rem;
+  align-items: center;
   display: grid;
-  grid-template-columns: auto 1fr 1rem;
-  gap: 0.5rem 1rem;
+  gap: 1rem 1rem;
+  grid-template-columns: minmax(auto, 8em) 1fr 1rem;
 }
 #options > form > * {
-  display: grid;
-  grid-column: span 3;
-  grid-template-columns: subgrid;
+  display: contents;
+}
+#options label::after {
+  content: " :";
+}
+#options .hint {
+  height: 1em;
   position: relative;
 }
 #options .hint > div {
   background-color: #fff;
-  color: #000;
-  z-index: 1000;
-  right: 1.5rem;
-  position: absolute;
   border-radius: 0.5rem;
+  box-shadow: 0 0.2rem 0.2rem rgba(0, 0, 0, 0.5333333333);
+  color: #000;
+  min-width: 15em;
   padding: 0.5rem;
-  display: none;
+  position: absolute;
+  right: 1.5rem;
+  z-index: 1000;
 }
-#options .hint:hover > div {
-  display: block;
+#options .hint:not(:hover) > div {
+  display: none;
 }
 #options .hint::before {
   position: absolute;
@@ -186,6 +239,42 @@ legend button {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+#options .close {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0.5em;
+  border: none;
+  border-radius: 1em;
+  width: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  cursor: pointer;
+}
+#options .close::before {
+  content: "▸	▸	▸";
+  border: 1px solid white;
+  height: 5em;
+  width: 0.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border-left: none;
+  border-radius: 0 0.25em 0.25em 0;
+  background-color: inherit;
+}
+#options .close:hover::before {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+#options.closed {
+  height: 100%;
+  position: absolute;
+}
+#options.closed ::before {
+  content: "◂	◂	◂";
 }
 
 .ribbon {

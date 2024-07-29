@@ -34,13 +34,17 @@
                 line-height: 0;
             }
         }
+        blockquote {
+            font-size: .8em;
+            margin: 0;
+            text-align: center;
+            font-style: italic;
+            margin-left: 5em;
+            margin-top: -.3em;
+        }
     }
 
     > footer {
         display: none;
     }
-}
-
-#app {
-    flex-grow: 1;
 }

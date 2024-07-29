@@ -6,6 +6,10 @@ export default class App {
 		this.form = document.getElementById("html2dom");
 		this.editorHTML = this.addHtmlEditor();
 		this.editorJs = this.createEditor("out", "javascript");
+		this.editors = {
+			html: this.editorHTML,
+			dom: this.editorJs,
+		};
 		this.update();
 		this.options = document.getElementById("options");
 		options.addEventListener("input", e => {
@@ -36,7 +40,7 @@ export default class App {
 	}
 	static addHtmlEditor() {
 		const editor = this.createEditor("in");
-		editor.setValue(window.exemple.innerHTML, -1);
+		editor.setValue(window.example.innerHTML, -1);
 		editor.getSession().on('change', () => {
 			this.update();
 		});
@@ -47,8 +51,8 @@ export default class App {
 		editor.setTheme("ace/theme/monokai");
 		editor.setFontSize(16);
 		editor.session.setMode(`ace/mode/${mode}`);
+		// editor.session.setUseWrapMode(true);
 		return editor;
-
 	}
 	static addJsEditor() {
 		const editor = this.createEditor("out", "javascript");
@@ -66,7 +70,6 @@ export default class App {
 		});
 	}
 	static addBackdrop(text) {
-		console.log(text);
 		const backdrop = document.createElement("div");
 		backdrop.classList.add("backdrop");
 		backdrop.classList.add("off");
@@ -86,9 +89,13 @@ export default class App {
 		return backdrop;
 	}
 	static evt = {
-		clickCopyJs: e => {
-			const text = this.editorJs.getValue();
+		clickCopy: e => {
+			const text = this.editors[e.target.closest("fieldset").id].getValue();
 			navigator.clipboard.writeText(text);
+			e.target.classList.add("clicked");
+			e.target.addEventListener("animationend", e => {
+				e.target.classList.remove("clicked");
+			}, { once: true });
 		},
 		clickCopyHtml: e => {
 			const text = this.editorHTML.getValue();
@@ -97,5 +104,13 @@ export default class App {
 		clickPlay: e => {
 			this.addBackdrop(this.editorJs.getValue());
 		},
+		clickWordWrap: e => {
+			const checked = e.target.classList.toggle("checked");
+			const editor = this.editors[e.target.closest("fieldset").id];
+			editor.session.setUseWrapMode(checked);
+		},
+		clickOptionsClose: e => {
+			e.target.closest("fieldset").classList.toggle("closed");
+		}
 	};
 }
