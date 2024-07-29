@@ -1,20 +1,16 @@
 #options {
 	min-width: 250px;
+	overflow-y: auto;
+	padding-top: .5rem;
+	padding: 1rem;
 	position: relative;
 	> form {
-		padding: 1rem;
-		padding-top: .5em;
+		align-items: center;
 		display: grid;
-		grid-template-columns: minmax(auto, 10em) 1fr 1rem;
-		gap: .5rem 1rem;
-		overflow-y: auto;
+		gap: 1rem 1rem;
+		grid-template-columns: minmax(auto, 8em) 1fr 1rem;
 		> * {
-			align-items: center;
-			align-content: center;
-			display: grid;
-			grid-column: span 3;
-			grid-template-columns: subgrid;
-			position: relative;
+			display: contents;
 		}
 	}
 	label {
@@ -23,18 +19,21 @@
 		}
 	}
 	.hint {
+		height: 1em;
+		position: relative;
 		> div {
 			background-color: #fff;
-			color: #000;
-			z-index: 1000;
-			right: 1.5rem;
-			position: absolute;
 			border-radius: .5rem;
+			box-shadow: 0 .2rem .2rem #0008;
+			color: #000;
+			min-width: 15em;
 			padding: .5rem;
-			display: none;
+			position: absolute;
+			right: 1.5rem;
+			z-index: 1000;
 		}
-		&:hover > div {
-			display: block;
+		&:not(:hover) > div {
+			display: none;
 		}
 		&::before {
 			position: absolute;
@@ -62,10 +61,9 @@
 		display: flex;
 		align-items: center;
 		justify-content: start;
+		cursor: pointer;
 		&::before {
-			content: "⋮";
-			content: "\25B8\09\25B8\09\25B8"; // triangle right = 25B6 = 9654
-			// content: "\25b9"; // small triangle right =
+			content: "\25B8\09\25B8\09\25B8";
 			border:1px solid white;
 			height: 5em;
 			width: .5em;
@@ -73,18 +71,19 @@
 			align-items: center;
 			justify-content: center;
 			line-height: 1;
-			border-right: none;
-			margin-left: -.5em;
-			border-radius: .25em 0 0 .25em;
+			border-left: none;
+			border-radius: 0 .25em .25em 0;
 			background-color: inherit;
 		}
-		&:hover {
+		&:hover::before {
 			background-color: #Fff3;
 		}
 	}
 	&.closed {
 		height: 100%;
 		position: absolute;
-		// height: max-content;
+		::before {
+			content: '\25C2\09\25C2\09\25C2';
+		}
 	}
 }
