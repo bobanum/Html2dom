@@ -1,10 +1,12 @@
-#html2dom {
+#app {
 	display: grid;
 	grid-template-columns: 1fr auto;
 	grid-template-areas: "h o" "d o";
 	gap: 1rem;
 	padding: 1rem;
 	height: 100%;
+	position: relative;
+	overflow: hidden;
 	@media (aspect-ratio > 2 / 1) {
 		grid-template-columns: 1fr 1fr auto;
 		grid-template-areas: "h d o";
