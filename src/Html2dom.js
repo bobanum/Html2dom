@@ -38,7 +38,7 @@ export default class Html2dom {
 			result.forEach((line, i) => {
 				result[i] = line.replace(/^var\s+/, "");
 			});
-			result.unshift(``);
+			result.unshift("");
 			result.unshift(this.i(`var ${varnames.join(", ")}`));
 		}
 		return result.join(this.LINEFEEDS[this.options.linefeed]);
@@ -177,11 +177,11 @@ export default class Html2dom {
 		} else if (node.nodeType === 8) {
 			return this.varName("comment");
 		} else if (node.hasAttribute("id")) {
-			return this.toCamelCase(node.getAttribute("id"));
+			return this.varName(this.toCamelCase(node.getAttribute("id")));
 		} else if (node.hasAttribute("class")) {
-			return this.classToName(node.getAttribute("class"));
+			return this.varName(this.classToName(node.getAttribute("class")));
 		} else {
-			return node.localName;
+			return this.varName(node.localName);
 		}
 	}
 	static classToName(className) {

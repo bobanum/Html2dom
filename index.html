@@ -27,17 +27,19 @@
 			 </blockquote>
 		</header>
 		<div id="app">
-			<div action="#" id="html2dom">
+			<div id="html2dom">
 				<fieldset id="html">
 					<legend>HTML
-						<button onclick="App.evt.clickCopyHtml.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
+						<button class="copyBtn" onclick="App.evt.clickCopy.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
+						<button onclick="App.evt.clickWordWrap.apply(this, arguments)" title="Word Wrap">↩</button>
 					</legend>
 					<div id="in"></div>
 				</fieldset>
 				<fieldset id="dom">
 					<legend>Javascript 
+						<button class="copyBtn" onclick="App.evt.clickCopy.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
+						<button onclick="App.evt.clickWordWrap.apply(this, arguments)" title="Word Wrap">↩</button>
 						<button onclick="App.evt.clickPlay.apply(this, arguments)" title="Preview">▶</button>
-						<button onclick="App.evt.clickCopyJs.apply(this, arguments)" title="Copy to clipboard">📋︎</button>
 					</legend>
 					<div id="out"></div>
 				</fieldset>

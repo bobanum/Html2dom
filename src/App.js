@@ -6,6 +6,10 @@ export default class App {
 		this.form = document.getElementById("html2dom");
 		this.editorHTML = this.addHtmlEditor();
 		this.editorJs = this.createEditor("out", "javascript");
+		this.editors = {
+			html: this.editorHTML,
+			dom: this.editorJs,
+		};
 		this.update();
 		this.options = document.getElementById("options");
 		options.addEventListener("input", e => {
@@ -85,9 +89,13 @@ export default class App {
 		return backdrop;
 	}
 	static evt = {
-		clickCopyJs: e => {
-			const text = this.editorJs.getValue();
+		clickCopy: e => {
+			const text = this.editors[e.target.closest("fieldset").id].getValue();
 			navigator.clipboard.writeText(text);
+			e.target.classList.add("clicked");
+			e.target.addEventListener("animationend", e => {
+				e.target.classList.remove("clicked");
+			}, { once: true });
 		},
 		clickCopyHtml: e => {
 			const text = this.editorHTML.getValue();
@@ -95,6 +103,11 @@ export default class App {
 		},
 		clickPlay: e => {
 			this.addBackdrop(this.editorJs.getValue());
+		},
+		clickWordWrap: e => {
+			const checked = e.target.classList.toggle("checked");
+			const editor = this.editors[e.target.closest("fieldset").id];
+			editor.session.setUseWrapMode(checked);
 		},
 	};
 }

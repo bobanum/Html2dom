@@ -119,6 +119,7 @@ fieldset {
 legend {
   padding: 0 0.5rem;
   margin: 0 0.5rem;
+  display: flex;
 }
 legend button {
   background-color: transparent;
@@ -129,10 +130,42 @@ legend button {
   color: inherit;
   cursor: pointer;
 }
+legend button:first-of-type {
+  margin-left: 1.5em;
+}
 legend button:hover {
   color: #FF0;
 }
+legend button.checked {
+  color: #F80;
+}
+legend button.copyBtn.clicked {
+  color: #0F0;
+  animation-name: nod;
+  animation-duration: 2s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-out;
+}
 
+@keyframes nod {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    color: unset;
+    transform: scale(1);
+    opacity: 0;
+  }
+  100% {
+    color: unset;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 #html {
   grid-area: h;
 }
