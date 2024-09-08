@@ -7,6 +7,7 @@ export default class Html2dom {
 		textContent: "textContent",	// How to set text content : textContent, innerHTML, textNode
 		semicolon: true,			// Whether to add a semicolon at the end of each line
 		addToBody: true,			// Whether to append the elements to the body
+		// functionSelector: "",	// 
 		compoundAppendChild: true,	// Whether to use appendChild and createElement together
 		compoundClassListAdd: true,	// Whether to use multiple classList.add or multiple arguments
 		classAsAttribute: false,	// Whether to use setAttribute("class", "className") or classList.add("className")
@@ -26,6 +27,28 @@ export default class Html2dom {
 		str = str.trim().replace(/&/g, "&amp;");
 		const dom = document.createElement("div");
 		dom.innerHTML = str;
+		///////////////////////////
+		if (this.options.functionSelector) {
+			// const nodes = Array.from(dom.querySelectorAll(this.options.functionSelector));
+			// if (nodes.length) {
+			// 	const node = nodes[0];
+			// 	if (node !== dom.firstChild) {
+			// 		console.log(nodes[0].outerHTML);
+			// 		console.log(this.translate(nodes[0].outerHTML));
+			// 	}
+			// }
+			
+			// nodes.forEach(node => {
+			// 	const parent = node.parentNode;
+			// 	const varName = this.varName(node);
+			// 	const result = this.translateElementNode(node, null);
+			// 	const index = parent.childNodes.indexOf(node);
+			// 	parent.removeChild(node);
+			// 	parent.childNodes.splice(index, 0, varName);
+			// 	parent.childNodes.splice(index + 1, 0, ...result);
+			// });
+		}
+		///////////////////////////
 		this.variables = {};
 		const result = [];
 		const nodes = Array.from(dom.childNodes);
@@ -41,6 +64,7 @@ export default class Html2dom {
 			result.unshift("");
 			result.unshift(this.i(`var ${varnames.join(", ")}`));
 		}
+		
 		return result.join(this.LINEFEEDS[this.options.linefeed]);
 	}
 	static getOption(name, defaultValue) {

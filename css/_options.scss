@@ -4,23 +4,78 @@
 	padding-top: .5rem;
 	padding: 1rem;
 	position: relative;
-	> form {
+
+	form,
+	fieldset {
 		align-items: center;
 		display: grid;
 		gap: 1rem 1rem;
-		grid-template-columns: minmax(auto, 8em) 1fr 1rem;
-		> * {
-			display: contents;
+		grid-template-columns: auto 1fr 1rem;
+		grid-column: 1 / -1;
+	}
+	fieldset {
+		border-color: #fff6;
+		background-color: #0001;
+	}
+
+	fieldset:has(legend input) {
+		margin-top: -.5em;
+		legend input {
+			display: none;
+		}
+
+		legend {
+			&::before {
+				// content: '\25B4\25B8\25Be\25C2';
+				content: '\25C2';
+				content: '\25BE';
+				position: relative;
+				top: -.1em
+			}
 		}
 	}
-	label {
-		&::after {
-			content: '\a0:';
+
+	fieldset:has(legend input:checked) {
+		padding-bottom: 0;
+		padding-top: 0;
+		border-style: solid none none none;
+
+		legend ~ * {
+			display: none;
+		}
+
+	}
+
+	legend:has(input:checked) {
+		&::before {
+			content: '\25B8';
 		}
 	}
+
+	legend:has(input) ~ * {
+		display: none;
+	}
+
+	legend:has(:checked) {
+		legend:has(:checked) ~ * {
+			display: none;
+		}
+	}
+
+	.formfield {
+		display: contents;
+
+		label {
+			&::after {
+				content: '\a0:';
+			}
+		}
+	}
+
 	.hint {
 		height: 1em;
 		position: relative;
+
 		> div {
 			background-color: #fff;
 			border-radius: .5rem;
@@ -32,9 +87,11 @@
 			right: 1.5rem;
 			z-index: 1000;
 		}
+
 		&:not(:hover) > div {
 			display: none;
 		}
+
 		&::before {
 			position: absolute;
 			content: '❓\FE0E';
@@ -50,6 +107,7 @@
 			justify-content: center;
 		}
 	}
+
 	.close {
 		position: absolute;
 		top: 0;
@@ -62,9 +120,10 @@
 		align-items: center;
 		justify-content: start;
 		cursor: pointer;
+
 		&::before {
 			content: "\25B8\09\25B8\09\25B8";
-			border:1px solid white;
+			border: 1px solid white;
 			height: 5em;
 			width: .5em;
 			display: flex;
@@ -75,13 +134,16 @@
 			border-radius: 0 .25em .25em 0;
 			background-color: inherit;
 		}
+
 		&:hover::before {
 			background-color: #Fff3;
 		}
 	}
+
 	&.closed {
 		height: 100%;
 		position: absolute;
+
 		::before {
 			content: '\25C2\09\25C2\09\25C2';
 		}

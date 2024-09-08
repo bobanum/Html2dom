@@ -196,16 +196,51 @@ legend button.copyBtn.clicked {
   padding: 1rem;
   position: relative;
 }
-#options > form {
+#options form,
+#options fieldset {
   align-items: center;
   display: grid;
   gap: 1rem 1rem;
-  grid-template-columns: minmax(auto, 8em) 1fr 1rem;
+  grid-template-columns: auto 1fr 1rem;
+  grid-column: 1/-1;
 }
-#options > form > * {
+#options fieldset {
+  border-color: rgba(255, 255, 255, 0.4);
+  background-color: rgba(0, 0, 0, 0.0666666667);
+}
+#options fieldset:has(legend input) {
+  margin-top: -0.5em;
+}
+#options fieldset:has(legend input) legend input {
+  display: none;
+}
+#options fieldset:has(legend input) legend::before {
+  content: "◂";
+  content: "▾";
+  position: relative;
+  top: -0.1em;
+}
+#options fieldset:has(legend input:checked) {
+  padding-bottom: 0;
+  padding-top: 0;
+  border-style: solid none none none;
+}
+#options fieldset:has(legend input:checked) legend ~ * {
+  display: none;
+}
+#options legend:has(input:checked)::before {
+  content: "▸";
+}
+#options legend:has(input) ~ * {
+  display: none;
+}
+#options legend:has(:checked) legend:has(:checked) ~ * {
+  display: none;
+}
+#options .formfield {
   display: contents;
 }
-#options label::after {
+#options .formfield label::after {
   content: " :";
 }
 #options .hint {
